@@ -6,6 +6,10 @@ source ./00-vars
 # enable Kubernetes Engine first
 # https://console.cloud.google.com/apis/library/container.googleapis.com?q=kubernetes%20engine
 
+gcloud components \
+  update \
+    --quiet
+
 if [[ -z $(gcloud auth list --filter=status:ACTIVE --format="value(account)") ]]
 then
   gcloud config \
@@ -40,10 +44,6 @@ gcloud config \
 
 gcloud config \
   set container/new_scopes_behavior true
-
-gcloud components \
-  update \
-    --quiet
 
 gcloud projects \
   create "${GCLOUD_PROJECT_ID}"
