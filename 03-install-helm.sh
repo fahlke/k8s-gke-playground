@@ -23,12 +23,6 @@ TILLER_SERVICE_ACCOUNT='tiller'
 TILLER_SERVICE_ACCOUNT_CONFIG="${CERT_DIR}/tiller-serviceaccount.yaml"
 TILLER_REPLICA_COUNT='3'
 
-USER_NAME='alexander.fahlke'
-USER_CERT_CONFIG="${CERT_DIR}/${USER_NAME}-config.json"
-
-
-
-
 
 cat > "${TILLER_SERVICE_ACCOUNT_CONFIG}" <<EOF
 apiVersion: v1
@@ -126,32 +120,6 @@ cfssl gencert \
   -hostname="${TILLER_HOSTNAME}" \
   "${TILLER_CSR_CONFIG}" | cfssljson -bare "${CERT_DIR}/tiller"
 
-# Helm client (user) certificate
-cat > "${USER_CERT_CONFIG}" <<EOF
-{
-  "CN": "helm:user:account:${USER_NAME}",
-  "hosts":[],
-  "key": {
-    "algo": "rsa",
-    "size": 4096
-  },
-  "names": [{
-      "C":  "DE",
-      "ST": "Lower Saxony",
-      "L":  "Uelzen",
-      "O":  "Tiller",
-      "OU": "User"
-  }]
-}
-EOF
-cfssl gencert \
-  -ca="${TLS_CA_CERT}" \
-  -ca-key="${TLS_CA_KEY}" \
-  -config="${TLS_CA_CONFIG}" \
-  -profile="helm-user-account" \
-  -hostname="${TILLER_HOSTNAME}" \
-  "${USER_CERT_CONFIG}" | cfssljson -bare "${CERT_DIR}/${USER_NAME}"
-
 
 
 # - Server setup -
@@ -173,3 +141,5 @@ helm version \
   --tls-cert "${CERT_DIR}/${USER_NAME}.pem" \
   --tls-key "${CERT_DIR}/${USER_NAME}-key.pem" \
   --tls-verify
+
+helm repo update
