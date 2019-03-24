@@ -3,27 +3,28 @@
 # Configuration
 source ./00-vars
 
-TEMP="/tmp/k8s"
-BASE_DIR="${TEMP}/certificates"
-mkdir -p "${BASE_DIR}"
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CERT_DIR="${BASEDIR}/build/certificates"
+mkdir -p "${CERT_DIR}"
 
-TLS_CA_CONFIG="${BASE_DIR}/ca-config.json"
-TLS_CA_CSR_CONFIG="${BASE_DIR}/ca-csr.json"
-TLS_CA_CERT="${BASE_DIR}/ca.pem"
-TLS_CA_KEY="${BASE_DIR}/ca-key.pem"
-TLS_CA_CSR="${BASE_DIR}/ca.csr"
+TLS_CA_CONFIG="${CERT_DIR}/ca-config.json"
+TLS_CA_CSR_CONFIG="${CERT_DIR}/ca-csr.json"
+TLS_CA_CERT="${CERT_DIR}/ca.pem"
+TLS_CA_KEY="${CERT_DIR}/ca-key.pem"
+TLS_CA_CSR="${CERT_DIR}/ca.csr"
 
-TILLER_CSR_CONFIG="${BASE_DIR}/tiller-csr.json"
-TILLER_TLS_CERT="${BASE_DIR}/tiller.pem"
-TILLER_TLS_KEY="${BASE_DIR}/tiller-key.pem"
-TILLER_CSR="${BASE_DIR}/tiller.csr"
+TILLER_CSR_CONFIG="${CERT_DIR}/tiller-csr.json"
+TILLER_TLS_CERT="${CERT_DIR}/tiller.pem"
+TILLER_TLS_KEY="${CERT_DIR}/tiller-key.pem"
+TILLER_CSR="${CERT_DIR}/tiller.csr"
 
 TILLER_HOSTNAME='tiller.k8s.int.fahlke.dev' #35.231.177.50
 TILLER_SERVICE_ACCOUNT='tiller'
-TILLER_SERVICE_ACCOUNT_CONFIG="${BASE_DIR}/tiller-serviceaccount.yaml"
+TILLER_SERVICE_ACCOUNT_CONFIG="${CERT_DIR}/tiller-serviceaccount.yaml"
+TILLER_REPLICA_COUNT='3'
 
 USER_NAME='alexander.fahlke'
-USER_CERT_CONFIG="${BASE_DIR}/${USER_NAME}-config.json"
+USER_CERT_CONFIG="${CERT_DIR}/${USER_NAME}-config.json"
 
 
 
@@ -50,24 +51,6 @@ subjects:
     namespace: kube-system
 EOF
 kubectl apply -f "${TILLER_SERVICE_ACCOUNT_CONFIG}"
-
-
-
-
-
-
-# - Server setup -
-# Install tiller in K8s cluster
-helm init \
-  --override 'spec.template.spec.containers[0].command'='{/tiller,--storage=secret}' \
-  --tiller-tls \
-  --tiller-tls-verify \
-  --tiller-tls-cert "${TILLER_TLS_CERT}" \
-  --tiller-tls-key "${TILLER_TLS_KEY}" \
-  --tls-ca-cert "${TLS_CA_CERT}" \
-  --service-account "${TILLER_SERVICE_ACCOUNT}"
-
-exit 0
 
 
 # - Certificate Authority -
@@ -112,7 +95,7 @@ cat > "${TLS_CA_CSR_CONFIG}" <<EOF
 }
 EOF
 cfssl gencert \
-  -initca "${TLS_CA_CSR_CONFIG}" | cfssljson -bare "${BASE_DIR}/ca"
+  -initca "${TLS_CA_CSR_CONFIG}" | cfssljson -bare "${CERT_DIR}/ca"
 
 
 
@@ -141,7 +124,7 @@ cfssl gencert \
   -config="${TLS_CA_CONFIG}" \
   -profile="tiller-server" \
   -hostname="${TILLER_HOSTNAME}" \
-  "${TILLER_CSR_CONFIG}" | cfssljson -bare "${BASE_DIR}/tiller"
+  "${TILLER_CSR_CONFIG}" | cfssljson -bare "${CERT_DIR}/tiller"
 
 # Helm client (user) certificate
 cat > "${USER_CERT_CONFIG}" <<EOF
@@ -167,7 +150,7 @@ cfssl gencert \
   -config="${TLS_CA_CONFIG}" \
   -profile="helm-user-account" \
   -hostname="${TILLER_HOSTNAME}" \
-  "${USER_CERT_CONFIG}" | cfssljson -bare "${BASE_DIR}/${USER_NAME}"
+  "${USER_CERT_CONFIG}" | cfssljson -bare "${CERT_DIR}/${USER_NAME}"
 
 
 
@@ -175,9 +158,18 @@ cfssl gencert \
 # Install tiller in K8s cluster
 helm init \
   --override 'spec.template.spec.containers[0].command'='{/tiller,--storage=secret}' \
+  --replicas "${TILLER_REPLICA_COUNT}" \
   --tiller-tls \
   --tiller-tls-verify \
   --tiller-tls-cert "${TILLER_TLS_CERT}" \
   --tiller-tls-key "${TILLER_TLS_KEY}" \
   --tls-ca-cert "${TLS_CA_CERT}" \
   --service-account "${TILLER_SERVICE_ACCOUNT}"
+
+# verifiy proper installation by checking client and server version
+helm version \
+  --tls \
+  --tls-ca-cert "${TLS_CA_CERT}" \
+  --tls-cert "${CERT_DIR}/${USER_NAME}.pem" \
+  --tls-key "${CERT_DIR}/${USER_NAME}-key.pem" \
+  --tls-verify
