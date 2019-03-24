@@ -1,6 +1,10 @@
 # k8s-gke-playground
 Helper scripts for my personal K8s playground setup with GKE
 
+## Prerequisites
+
+    brew install cfssl google-cloud-sdk
+
 ## Pricing
 
 Get an overview of default (predefined) machine types for GKE clusters [here][predefined-instanc-pricing].
