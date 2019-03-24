@@ -7,7 +7,7 @@ export GCLOUD_PROJECT_ID='k8s-testing-fahlke'
 # name of the cluster
 export GCLOUD_CONTAINER_CLUSTER_NAME='development'
 
-export GCLOUD_COMPUTE_MACHINE_TYPE='n1-standard-1'
+export GCLOUD_COMPUTE_MACHINE_TYPE='n1-standard-2'
 export GCLOUD_COMPUTE_REGION='us-east1'
 export GCLOUD_COMPUTE_ZONE='us-east1-c'
 
