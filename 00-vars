@@ -34,3 +34,5 @@ export GCLOUD_CONTAINER_CLUSTER_METADATA='disable-legacy-endpoints=true'
 
 # https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--addons
 export GCLOUD_CONTAINER_CLUSTER_ADDONS='HorizontalPodAutoscaling,NetworkPolicy'
+
+source 00-vars-overrides
