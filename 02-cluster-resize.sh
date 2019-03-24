@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Configuration
-source ./00-vars
-
 if [[ -z $1 ]]; then
   echo "Usage: 04-cluster-resize.sh <num target nodes>"
   exit
 fi
+
+# Configuration
+source ./00-vars
 
 GCLOUD_CONTAINER_CLUSTER_NUM_NODES_RESIZE_TARGET=$1
 
