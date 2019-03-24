@@ -1,5 +1,5 @@
 # account to be used
-export GCLOUD_COMPUTE_ACCOUNT='mail@example.com'
+export GCLOUD_COMPUTE_ACCOUNT='alexander.fahlke@gmail.com'
 
 # name of the project
 export GCLOUD_PROJECT_ID='k8s-testing-fahlke'
