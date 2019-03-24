@@ -1,0 +1,36 @@
+# account to be used
+export GCLOUD_COMPUTE_ACCOUNT='mail@example.com'
+
+# name of the project
+export GCLOUD_PROJECT_ID='k8s-testing-fahlke'
+
+# name of the cluster
+export GCLOUD_CONTAINER_CLUSTER_NAME='development'
+
+export GCLOUD_COMPUTE_MACHINE_TYPE='n1-standard-1'
+export GCLOUD_COMPUTE_REGION='us-east1'
+export GCLOUD_COMPUTE_ZONE='us-east1-c'
+
+# Number of instances to be run per zone
+export GCLOUD_CONTAINER_CLUSTER_NUM_NODES_PER_ZONE='3'
+export GCLOUD_CONTAINER_CLUSTER_NUM_NODES_RESIZE_TARGET='3'
+export GCLOUD_CONTAINER_CLUSTER_AUTOSCALE_MIN_NODES="${GCLOUD_CONTAINER_CLUSTER_NUM_NODES_PER_ZONE}"
+export GCLOUD_CONTAINER_CLUSTER_AUTOSCALE_MAX_NODES=6
+export GCLOUD_CONTAINER_CLUSTER_IMAGE_TYPE='COS_CONTAINERD'
+export GCLOUD_CONTAINER_CLUSTER_MASTER_VERSION='1.12.5-gke.5'
+export GCLOUD_CONTAINER_CLUSTER_NODE_VERSION="${GCLOUD_CONTAINER_CLUSTER_MASTER_VERSION}"
+
+# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--maintenance-window
+export GCLOUD_CONTAINER_CLUSTER_MAINTENANCE_UTC='4:00'
+
+# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--create-subnetwork
+export GCLOUD_CONTAINER_CLUSTER_SUBNETWORK='range=10.0.0.0/20'
+
+# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--node-labels
+export GCLOUD_CONTAINER_CLUSTER_NODE_LABELS='node-role.kubernetes.io/compute=true'
+
+# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--metadata
+export GCLOUD_CONTAINER_CLUSTER_METADATA='disable-legacy-endpoints=true'
+
+# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--addons
+export GCLOUD_CONTAINER_CLUSTER_ADDONS='HorizontalPodAutoscaling,NetworkPolicy'
