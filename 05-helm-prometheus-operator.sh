@@ -18,6 +18,7 @@ source ${USER_CONFIG}
 
 helm install \
   --name prometheus-dev \
+  --namespace monitoring \
   stable/prometheus-operator
 
 # https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/exposing-prometheus-and-alertmanager.md
