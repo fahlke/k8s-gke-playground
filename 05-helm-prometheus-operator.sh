@@ -28,4 +28,6 @@ helm install \
 # open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/alertmanager-operated:9093/proxy
 # open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/prometheus-prometheus-node-exporter:9100/proxy
 # open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/prometheus-kube-state-metrics:8080/proxy
+
+# default password for grafana: kubectl get secret --namespace monitoring prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 # open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/prometheus-grafana:80/proxy
