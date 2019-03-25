@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # https://github.com/helm/charts/tree/master/stable/elastic-stack
+# https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/fluentd-elasticsearch/kibana-deployment.yaml#L35
 
 if [[ -z "$1" ]]; then
   echo "Usage: 06-helm-elastic-stack.sh <firstname.lastname>"
@@ -24,7 +25,6 @@ kibana:
   enabled: true
   env:
     ELASTICSEARCH_URL: 'http://efk-elasticsearch-client.monitoring.svc.cluster.local:9200'
-    # SERVER_BASEPATH: '/api/v1/namespaces/monitoring/services/efk-kibana/proxy'
 
 logstash:
   enabled: false
