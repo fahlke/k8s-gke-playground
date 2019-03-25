@@ -18,7 +18,7 @@ TILLER_TLS_CERT="${CERT_DIR}/tiller.pem"
 TILLER_TLS_KEY="${CERT_DIR}/tiller-key.pem"
 TILLER_CSR="${CERT_DIR}/tiller.csr"
 
-TILLER_HOSTNAME='tiller.k8s.int.fahlke.dev' #35.231.177.50
+TILLER_HOSTNAME='tiller.k8s.int.fahlke.dev'
 TILLER_SERVICE_ACCOUNT='tiller'
 TILLER_SERVICE_ACCOUNT_CONFIG="${CERT_DIR}/tiller-serviceaccount.yaml"
 TILLER_REPLICA_COUNT='3'
