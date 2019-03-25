@@ -23,7 +23,8 @@ elasticsearch:
 kibana:
   enabled: true
   env:
-    ELASTICSEARCH_URL: 'http://elastic-stack-dev-elasticsearch-client.monitoring.svc.cluster.local:9200'
+    ELASTICSEARCH_URL: 'http://efk-elasticsearch-client.monitoring.svc.cluster.local:9200'
+    # SERVER_BASEPATH: '/api/v1/namespaces/monitoring/services/efk-kibana/proxy'
 
 logstash:
   enabled: false
@@ -33,22 +34,16 @@ elasticsearch-exporter:
 EOF
 
 helm install \
-  --name elastic-stack-dev \
+  --name efk \
   --values /tmp/values.yaml \
   --namespace monitoring \
   stable/elastic-stack
 
 rm -f /tmp/values.yaml
 
-# open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/elastic-stack-dev-elasticsearch-client:http/proxy/
-# open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/elastic-stack-dev-kibana:443/proxy/
+# kubectl proxy &
+# curl http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/efk-elasticsearch-client:http/proxy/
 
-# POD_NAME=$(kubectl get pods --namespace default -l "app=elastic-stack,release=elastic-stack-dev" -o jsonpath="{.items[0].metadata.name}")
-# echo "Visit http://127.0.0.1:5601 to use Kibana"
-# kubectl port-forward --namespace default $POD_NAME 5601:5601
-
-# helm upgrade \
-#   elastic-stack-dev \
-#   --values /tmp/values.yaml \
-#   --namespace monitoring \
-#   stable/elastic-stack
+# POD_NAME=$(kubectl get pods --namespace monitoring -l "app=kibana,release=efk" -o jsonpath="{.items[0].metadata.name}")
+# kubectl port-forward --namespace monitoring $POD_NAME 5601:5601
+# open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/efk-kibana:443/proxy/

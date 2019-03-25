@@ -21,7 +21,7 @@ helm repo add kiwigrid https://kiwigrid.github.io
 
 tee /tmp/values.yaml >/dev/null <<EOF
 elasticsearch:
-  host: 'elastic-stack-dev-elasticsearch-client.monitoring.svc.cluster.local'
+  host: 'efk-elasticsearch-client.monitoring.svc.cluster.local'
   port: 9200
   logstash_prefix: 'fluentd'
 
@@ -31,7 +31,7 @@ prometheusRule:
 EOF
 
 helm install \
-  --name fluentd-es-dev \
+  --name fluentd \
   --values /tmp/values.yaml \
   --namespace monitoring \
   kiwigrid/fluentd-elasticsearch

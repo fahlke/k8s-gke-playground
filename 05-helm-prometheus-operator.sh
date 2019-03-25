@@ -17,7 +17,7 @@ USER_CONFIG="${USER_CERT_DIR}/${USER_NAME}.rc"
 source ${USER_CONFIG}
 
 helm install \
-  --name prometheus-dev \
+  --name prometheus \
   --namespace monitoring \
   stable/prometheus-operator
 
