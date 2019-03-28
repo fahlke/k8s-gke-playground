@@ -36,14 +36,14 @@ EOF
 helm install \
   --name efk \
   --values /tmp/values.yaml \
-  --namespace monitoring \
+  --namespace logging \
   stable/elastic-stack
 
 rm -f /tmp/values.yaml
 
 # kubectl proxy &
-# curl http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/efk-elasticsearch-client:http/proxy/
+# curl http://127.0.0.1:8001/api/v1/namespaces/logging/services/efk-elasticsearch-client:http/proxy/
 
-# POD_NAME=$(kubectl get pods --namespace monitoring -l "app=kibana,release=efk" -o jsonpath="{.items[0].metadata.name}")
-# kubectl port-forward --namespace monitoring $POD_NAME 5601:5601
-# open http://127.0.0.1:8001/api/v1/namespaces/monitoring/services/efk-kibana:443/proxy/
+# POD_NAME=$(kubectl get pods --namespace logging -l "app=kibana,release=efk" -o jsonpath="{.items[0].metadata.name}")
+# kubectl port-forward --namespace logging $POD_NAME 5601:5601
+# open http://127.0.0.1:8001/api/v1/namespaces/logging/services/efk-kibana:443/proxy/
