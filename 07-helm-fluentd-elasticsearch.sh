@@ -25,15 +25,30 @@ elasticsearch:
   port: 9200
   logstash_prefix: 'fluentd'
 
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "24231"
+
+service:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 24231
+
+serviceMonitor:
+  enabled: true
+  labels:
+    release: system-monitoring
+
 prometheusRule:
   enabled: true
-  prometheusNamespace: default
+  prometheusNamespace: system-monitoring
 EOF
 
 helm install \
   --name fluentd \
   --values /tmp/values.yaml \
-  --namespace monitoring \
+  --namespace system-monitoring \
   kiwigrid/fluentd-elasticsearch
 
 rm -f /tmp/values.yaml

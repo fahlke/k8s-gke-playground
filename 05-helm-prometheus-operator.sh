@@ -24,7 +24,7 @@ prometheus:
   enabled: true
   prometheusSpec:
     retention: 14d
-    externalUrl: "prometheus.system.dev.ext.fahlke.dev"
+    #externalUrl: "prometheus.system.dev.ext.fahlke.dev"
     serviceMonitorNamespaceSelector: {"system-monitoring", "service-monitoring", "logging"}
   ingress:
     enabled: true
@@ -38,7 +38,7 @@ alertmanager:
   enabled: true
   alertmanagerSpec:
     retention: 72h
-    externalUrl: "alertmanager.system.dev.ext.fahlke.dev"
+    #externalUrl: "alertmanager.system.dev.ext.fahlke.dev"
   ingress:
     enabled: true
     hosts:
